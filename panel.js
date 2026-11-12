@@ -8,7 +8,7 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&l
 
 // ---------- Scan ----------
 async function scan() {
-  $('#result').hidden = true; $('#save').disabled = true; IMG_CACHE.clear();
+  $('#result').hidden = true; $('#save').disabled = true; $('#saveAs').disabled = true; IMG_CACHE.clear();
   status('Scanning\u2026');
   [TAB] = await chrome.tabs.query({ active: true, currentWindow: true });
   if (!TAB || !/^https?:/.test(TAB.url || '')) { status('Open a product page (http/https) and press Rescan.', 'error'); return; }
@@ -62,7 +62,7 @@ function render() {
   });
   updateCount();
   $('#result').hidden = false;
-  $('#save').disabled = false;
+  $('#save').disabled = false; $('#saveAs').disabled = false;
   updateSaveTo();
 }
 function updateCount() {
@@ -91,6 +91,7 @@ async function updateSaveTo() {
   if (s.mode === 'folder') { const h = await getFolder(); t = h ? `Saving to \u{1F4C1} ${h.name}` : 'No folder chosen \u2013 open \u2699'; }
   else if (s.mode === 'downloads') t = `Saving to Downloads/${s.subfolder || ''}`;
   else t = 'Will ask where to save';
+  t += ' \u2013 change';
   $('#saveTo').textContent = t;
 }
 
@@ -103,9 +104,10 @@ async function uniqueFile(dir, name) {
   return `${base} ${Date.now()}.pdf`;
 }
 
-async function save() {
+async function save(askOnce = false) {
   const btn = $('#save');
   const s = await getSettings();
+  if (askOnce === true) s.mode = 'ask'; // "Save as...": pick folder + name for this PDF only
   MAX_PX = s.maxImagePx;
 
   // Permission must be requested right away, while the click still counts as a user gesture.
@@ -126,7 +128,7 @@ async function save() {
   btn.disabled = true;
   try {
     const chosen = DATA.images.filter((i) => i.selected);
-    status(`Downloading ${chosen.length} high-resolution images\u2026`);
+    status(`Downloading ${chosen.length} images\u2026`);
     const loaded = [];
     for (let i = 0; i < chosen.length; i += 4) {
       (await Promise.all(chosen.slice(i, i + 4).map(loadImage))).forEach((r) => r && loaded.push(r));
@@ -161,7 +163,9 @@ async function save() {
 // ---------- Wiring ----------
 $('#rescan').addEventListener('click', scan);
 $('#settings').addEventListener('click', () => chrome.runtime.openOptionsPage());
-$('#save').addEventListener('click', save);
+$('#save').addEventListener('click', () => save(false));
+$('#saveAs').addEventListener('click', () => save(true));
+$('#saveTo').addEventListener('click', () => chrome.runtime.openOptionsPage());
 $('#selAll').addEventListener('click', () => DATA && DATA.images.forEach((im) => { if (!im.selected) im.tile.click(); }));
 $('#selNone').addEventListener('click', () => DATA && DATA.images.forEach((im) => { if (im.selected) im.tile.click(); }));
 chrome.storage.onChanged.addListener(updateSaveTo);

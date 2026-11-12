@@ -18,7 +18,8 @@ Created by **[Mahmud Farooque](https://mfaruk.com)** · Blog post: [Save any pro
 - **Price** = the selling price. EMI / per-month / installment and struck-through "was" prices are ignored.
 - **Images** = the product's own pictures (matched against the title words, gallery position and size), taken **exactly as the page shows them** — logos, icons and "related products" are filtered out.
 - Edit the title/price and untick sections or images before saving.
-- Save to **a folder you choose**, a Downloads sub-folder, or *Ask every time*.
+- Save to **a folder you choose**, a Downloads sub-folder, or *Ask every time*, plus a **Save as…** button to pick any folder and name for one PDF. Files are named after the product title.
+- Images are used exactly as the page shows them and never enlarged in the PDF.
 - PDF with Unicode font (₹ € £ ™ ° × …), spec tables, page numbers and a source link.
 - **Terminal/AI bridge** with a token-protected localhost API.
 
