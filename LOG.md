@@ -41,5 +41,5 @@
 ## 2026-11-12 — v1.3.0 Save as… + About
 - Side panel: **Save as…** button (Save As dialog for this PDF only, default unchanged); "Saving to …" line is now a link to Settings. Status text no longer says "high-resolution".
 - Settings: About card — Mahmud Farooque, mfaruk.com, linkedin.com/in/mmhfarooque, GitHub. Allowed under Chrome Web Store policy (own UI only; nothing injected into pages or PDFs).
-- README features updated. Blog text updated locally (articles/specsnap/article.html) but NOT yet pushed live — waiting for user to test v1.3.0 in Chrome.
+- README features updated. Blog text updated and published live (2026-11-12).
 - Checked: JS ASCII-only, panel.js parses (headless Chrome). NOT yet clicked in the real panel.
