@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "SpecSnap \u2013 Product Page to PDF",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Snap any e-commerce product page \u2013 title, price, features, description, specifications and images \u2013 into a clean PDF. Works from the browser or the terminal (AI agents).",
   "permissions": [
     "activeTab",

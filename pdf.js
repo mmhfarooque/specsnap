@@ -29,7 +29,9 @@ async function buildPdf(d, imgs, opts) {
     for (const ln of doc.splitTextToSize(String(str), width)) { ensure(lineH(size)); doc.text(ln, x, y + size * PT); y += lineH(size); }
     y += gap;
   };
-  const fit = (w, h, maxW, maxH) => { const r = Math.min(maxW / w, maxH / h); return [w * r, h * r]; };
+  // Never enlarge an image beyond its real size (1 px = 1/96 in = 0.2646 mm); a 500 px picture stays 132 mm wide.
+  const PX_MM = 25.4 / 96;
+  const fit = (w, h, maxW, maxH) => { const r = Math.min(maxW / w, maxH / h, PX_MM); return [w * r, h * r]; };
   const addImg = (im, x, yy, w, h) => doc.addImage(im.dataUrl, 'JPEG', x, yy, w, h, im.key, 'NONE');
 
   // ---- Header ----

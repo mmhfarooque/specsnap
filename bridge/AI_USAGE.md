@@ -23,6 +23,8 @@ Options: `--all-images`, `--images-per-page 1|2|4`, `--max-px N` (0 = no downsca
 - Failure: message on stderr, exit code 1.
 
 ## Notes
+- **File name:** use `-d <folder>` so the PDF is named after the product title (`<title> - <date>.pdf`). Only use `-o` when the user gives an exact file name; never invent one (e.g. a project or brand name).
+- **Images:** SpecSnap saves images exactly as the page shows them and never enlarges them in the PDF. Don't fetch "hi-res"/zoom versions; they are usually upscaled copies of the same picture.
 - Chrome must be running with the extension enabled. If `specsnap --status` fails, ask the user to open Chrome.
 - A background tab opens briefly and closes itself.
 - To read the result, use `--extract` (cheaper than parsing the PDF).

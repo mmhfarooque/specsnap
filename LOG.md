@@ -32,3 +32,8 @@
 - Fix (user applied): `~/.codex/config.toml` top-level `sandbox_mode = "workspace-write"` + `[sandbox_workspace_write] network_access = true`, then quit Codex + `pkill -f 'codex app-server'` (daemon keeps old config). Working after that.
 - Gotchas: `sandbox_mode` must be before any [table]; duplicate key breaks Codex startup. Backup at ~/.codex/config.toml.bak.
 - Documented in README ("Codex CLI"), bridge/AI_USAGE.md, and the live blog post (new h3 + FAQ line).
+
+## 2026-11-12 — v1.2.1 images never enlarged; title file names for agents
+- pdf.js `fit()` capped at native size (1 px = 25.4/96 mm): a 500 px image was stretched to full page width (71 ppi) on the "Product images" page; now 96 ppi.
+- AI_USAGE.md: agents must use `-d <folder>` (title-based name); `-o` only with a user-given name. Codex had named a StarTech METZ 65HD1 PDF "ARMOR.pdf".
+- Verified in user's Chrome (v1.2.1): METZ 65HD1 page -> 4-page PDF, image 500x500 at 96 ppi, file "<title> - 2026-11-12.pdf" in ~/Projects/Durbin Solutions/ProductInfo.
