@@ -25,3 +25,10 @@
 ## 2026-11-12 — blog draft
 - mfaruk.com draft post #22 created; working files in ~/Projects/articles/specsnap (article.html, meta.md, images, insert.php, LOG.md).
 - 2026-11-12: blog post PUBLISHED by Mahmud: https://mfaruk.com/blog/save-product-page-as-pdf-chrome-extension-specsnap (verified live: SEO, OG, JSON-LD, images, sitemap). README links it.
+
+## 2026-11-12 — Codex CLI sandbox workaround
+- First real (non-headless) install: user loaded unpacked in Chrome; ID matches, bridge `specsnap --status` ok.
+- Codex CLI 0.167 failed with `urlopen error [Errno 1] Operation not permitted`: Codex sandbox blocks network incl. 127.0.0.1; session was `read-only` (launched from ~, untrusted).
+- Fix (user applied): `~/.codex/config.toml` top-level `sandbox_mode = "workspace-write"` + `[sandbox_workspace_write] network_access = true`, then quit Codex + `pkill -f 'codex app-server'` (daemon keeps old config). Working after that.
+- Gotchas: `sandbox_mode` must be before any [table]; duplicate key breaks Codex startup. Backup at ~/.codex/config.toml.bak.
+- Documented in README ("Codex CLI"), bridge/AI_USAGE.md, and the live blog post (new h3 + FAQ line).

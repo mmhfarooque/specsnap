@@ -26,6 +26,7 @@ Options: `--all-images`, `--images-per-page 1|2|4`, `--max-px N` (0 = no downsca
 - Chrome must be running with the extension enabled. If `specsnap --status` fails, ask the user to open Chrome.
 - A background tab opens briefly and closes itself.
 - To read the result, use `--extract` (cheaper than parsing the PDF).
+- `Operation not permitted` on 127.0.0.1:8777 means *your* sandbox blocks localhost (e.g. Codex CLI), not that SpecSnap is down. Tell the user; don't try to change sandbox settings yourself. See README → "Codex CLI".
 
 ## Raw HTTP API (if you can't run the CLI)
 `127.0.0.1:8777` (port in `~/.config/productcapture/config.json`), header `X-Token: $(cat ~/.config/productcapture/token)`

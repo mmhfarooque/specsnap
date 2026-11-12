@@ -47,6 +47,24 @@ specsnap --current                         # the tab you're looking at
 ```
 For AI agents, point them at [`bridge/AI_USAGE.md`](bridge/AI_USAGE.md).
 
+### Codex CLI
+Codex's sandbox blocks network access from the commands it runs, including `127.0.0.1`, so `specsnap` fails with
+`urlopen error [Errno 1] Operation not permitted`. Codex may also start in **read-only** mode (for example when launched
+from your home folder), and then the network stays off whatever else you set. Fix it in `~/.codex/config.toml`
+(the first line goes at the top, before any `[section]`):
+```toml
+sandbox_mode = "workspace-write"
+
+[sandbox_workspace_write]
+network_access = true
+```
+Then restart Codex **including its background server**: quit Codex, run `pkill -f 'codex app-server'`, and start `codex` again.
+Closing the window alone keeps the old settings.
+
+Trade-off: Codex can then use the network for any command and edit files in its start folder without asking. Start it in a
+project folder, not `~`. The alternative is to leave the sandbox alone and run the `specsnap` command yourself.
+Claude Code needed no change in my tests.
+
 ### How it works
 ```
 specsnap CLI / AI ──HTTP + token──▶ bridge/host.py (127.0.0.1:8777)
