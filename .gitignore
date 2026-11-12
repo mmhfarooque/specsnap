@@ -1,0 +1,6 @@
+.keys/
+sample-output.pdf
+__pycache__/
+blog/bg/
+bridge/com.productcapture.host.json
+blog/

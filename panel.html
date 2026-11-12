@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SpecSnap</title>
+<link rel="stylesheet" href="panel.css">
+</head>
+<body>
+  <header class="bar">
+    <strong>SpecSnap</strong>
+    <span class="spacer"></span>
+    <button id="rescan" title="Scan the current tab again">↻ Rescan</button>
+    <button id="settings" title="Settings">⚙</button>
+  </header>
+
+  <div id="status" class="status">Scanning…</div>
+
+  <main id="result" hidden>
+    <label class="field">Title<textarea id="title" rows="2"></textarea></label>
+    <label class="field">Price<input id="price" type="text" placeholder="Not found – type it in"></label>
+    <div class="muted small" id="source"></div>
+
+    <h3>Sections</h3>
+    <div id="sections"></div>
+
+    <h3>Images <span class="muted small" id="imgCount"></span></h3>
+    <div class="row small">
+      <button id="selAll" class="link">Select all</button>
+      <button id="selNone" class="link">None</button>
+    </div>
+    <div id="images" class="grid"></div>
+  </main>
+
+  <footer class="bar bottom">
+    <span id="saveTo" class="muted small"></span>
+    <span class="spacer"></span>
+    <button id="save" class="primary" disabled>Save PDF</button>
+  </footer>
+
+  <script src="lib/jspdf.umd.min.js"></script>
+  <script src="storage.js"></script>
+  <script src="images.js"></script>
+  <script src="pdf.js"></script>
+  <script src="panel.js"></script>
+</body>
+</html>

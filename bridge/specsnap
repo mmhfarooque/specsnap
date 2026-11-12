@@ -1,0 +1,96 @@
+#!/usr/bin/env python3
+"""specsnap — capture an e-commerce product page to PDF via the SpecSnap Chrome extension.
+
+Examples:
+  specsnap https://shop.example.com/product/123              # PDF into the current directory
+  specsnap URL -o ~/Desktop/item.pdf                        # exact output file
+  specsnap URL --json                                       # also print extracted data as JSON
+  specsnap URL --extract                                    # JSON only (title, price, sections, images), no PDF
+  specsnap --current                                        # use the tab you're looking at in Chrome
+  specsnap --status                                         # is Chrome + the extension connected?
+
+Output: on success prints the PDF path (or JSON with --json/--extract). Exit code 0 = ok.
+Requires Chrome running with the extension loaded and `install.sh` run once.
+"""
+import argparse, json, os, sys, urllib.error, urllib.request
+
+CONF_DIR = os.path.expanduser("~/.config/productcapture")
+
+
+def api(method, path, body=None, timeout=400):
+    try:
+        token = open(os.path.join(CONF_DIR, "token")).read().strip()
+    except FileNotFoundError:
+        sys.exit("specsnap: no token found – run bridge/install.sh, then reload the extension in Chrome")
+    cfg = os.path.join(CONF_DIR, "config.json")
+    port = json.load(open(cfg)).get("port", 8777) if os.path.exists(cfg) else 8777
+    req = urllib.request.Request(f"http://127.0.0.1:{port}{path}", method=method,
+                                 data=json.dumps(body).encode() if body is not None else None,
+                                 headers={"X-Token": token, "Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            return json.load(r)
+    except urllib.error.HTTPError as e:
+        try:
+            return json.load(e)
+        except Exception:
+            return {"ok": False, "error": f"HTTP {e.code}"}
+    except (urllib.error.URLError, ConnectionError) as e:
+        sys.exit(f"specsnap: cannot reach the extension bridge on 127.0.0.1:{port} ({e}).\n"
+                 "Is Chrome open with 'SpecSnap' enabled? Did you run bridge/install.sh?")
+
+
+def main():
+    ap = argparse.ArgumentParser(prog="specsnap", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("url", nargs="?", help="product page URL")
+    ap.add_argument("-o", "--out", help="output PDF file (default: <title> - <date>.pdf in --dir)")
+    ap.add_argument("-d", "--dir", default=".", help="output directory when -o not given (default: current dir)")
+    ap.add_argument("--current", action="store_true", help="capture Chrome's active tab instead of opening URL")
+    ap.add_argument("--extract", action="store_true", help="only extract data, print JSON, no PDF")
+    ap.add_argument("--json", action="store_true", help="print full result JSON")
+    ap.add_argument("--all-images", action="store_true", help="include every candidate image, not just the detected product images")
+    ap.add_argument("--images-per-page", type=int, choices=[1, 2, 4])
+    ap.add_argument("--max-px", type=int, help="downscale images to this longest side (0 = never)")
+    ap.add_argument("--wait", type=float, default=2.5, help="seconds to wait after page load (default 2.5)")
+    ap.add_argument("--keep-tab", action="store_true", help="leave the opened tab open")
+    ap.add_argument("--overwrite", action="store_true", help="overwrite -o file if it exists")
+    ap.add_argument("--status", action="store_true", help="check the bridge connection")
+    a = ap.parse_args()
+
+    if a.status:
+        r = api("GET", "/status", timeout=10)
+        print(json.dumps(r, indent=2))
+        sys.exit(0 if r.get("ok") else 1)
+    if not a.url and not a.current:
+        ap.error("give a URL or --current")
+
+    opts = {"wait": int(a.wait * 1000), "keepTab": a.keep_tab, "allImages": a.all_images}
+    if a.images_per_page:
+        opts["imagesPerPage"] = a.images_per_page
+    if a.max_px is not None:
+        opts["maxImagePx"] = a.max_px
+    body = {"url": a.url, "current": a.current, "opts": opts}
+    if a.extract:
+        r = api("POST", "/extract", body)
+    else:
+        if a.out:
+            body["out"] = os.path.abspath(os.path.expanduser(a.out))
+        else:
+            body["out_dir"] = os.path.abspath(os.path.expanduser(a.dir))
+        body["overwrite"] = a.overwrite
+        r = api("POST", "/capture", body)
+
+    if not r.get("ok"):
+        print(f"specsnap: failed: {r.get('error')}", file=sys.stderr)
+        sys.exit(1)
+    if a.extract or a.json:
+        print(json.dumps(r, indent=2, ensure_ascii=False))
+    else:
+        print(r["file"])
+        d = r.get("data", {})
+        print(f"  {d.get('title')} | {d.get('price') or 'price n/a'} | {len(d.get('sections', []))} sections | "
+              f"{len(r.get('images', []))} images ({r.get('failedImages', 0)} failed) | {r.get('size', 0) // 1024} KB", file=sys.stderr)
+
+
+if __name__ == "__main__":
+    main()

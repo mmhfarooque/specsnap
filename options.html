@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SpecSnap – Settings</title>
+<link rel="stylesheet" href="panel.css">
+</head>
+<body class="options">
+  <h1>SpecSnap – Settings</h1>
+
+  <section class="card">
+    <h2>Where to save PDFs</h2>
+    <label class="radio"><input type="radio" name="mode" value="folder"> A folder I choose (saved straight there)</label>
+    <div class="indent">
+      <button id="pick">Choose folder…</button>
+      <span id="folderName" class="muted">No folder chosen</span>
+      <p class="muted small">Chrome may ask you to allow access again after a browser restart — just click “Allow”.</p>
+    </div>
+    <label class="radio"><input type="radio" name="mode" value="downloads"> Inside my Downloads folder, in sub-folder:</label>
+    <div class="indent"><input id="subfolder" type="text" placeholder="ProductCapture"></div>
+    <label class="radio"><input type="radio" name="mode" value="ask"> Ask me every time (Save As dialog)</label>
+  </section>
+
+  <section class="card">
+    <h2>PDF images</h2>
+    <label>Images per page
+      <select id="imagesPerPage"><option value="1">1 (largest)</option><option value="2">2</option><option value="4">4 (grid)</option></select>
+    </label>
+    <label>Max image size (px, longest side)
+      <select id="maxImagePx"><option value="1600">1600 – smaller PDF</option><option value="3000">3000 – high quality</option><option value="0">Original – no limit</option></select>
+    </label>
+  </section>
+
+  <p id="saved" class="muted"></p>
+  <script src="storage.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>
