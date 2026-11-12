@@ -9,7 +9,7 @@ Use it two ways:
 - **In the browser** — click the icon, review what it found in the side panel, press *Save PDF*.
 - **From the terminal / AI agents** — `specsnap "https://shop/product"` lets Claude Code, Codex, Gemini CLI (or your own scripts) grab product PDFs or JSON through your real browser.
 
-Created by **[Mahmud Farooque](https://mfaruk.com)** · Blog post: [mfaruk.com/blog](https://mfaruk.com/blog)
+Created by **[Mahmud Farooque](https://mfaruk.com)** · Blog post: [Save any product page as a PDF — SpecSnap](https://mfaruk.com/blog/save-product-page-as-pdf-chrome-extension-specsnap)
 
 ---
 

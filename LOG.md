@@ -21,3 +21,7 @@
 - Cross-platform bridge: install.sh (Linux + macOS; Chrome/Chromium/Brave/Edge/Vivaldi), install.ps1 + host.bat + specsnap.cmd (Windows, HKCU registry). Windows/macOS installers NOT tested yet.
 - MIT LICENSE © Mahmud Farooque (mfaruk.com); public repo github.com/mmhfarooque/specsnap.
 - Blog draft + featured image (SDXL background via ~/Projects/AI + HTML diagram overlay) in blog/ (git-ignored, local only).
+
+## 2026-11-12 — blog draft
+- mfaruk.com draft post #22 created; working files in ~/Projects/articles/specsnap (article.html, meta.md, images, insert.php, LOG.md).
+- 2026-11-12: blog post PUBLISHED by Mahmud: https://mfaruk.com/blog/save-product-page-as-pdf-chrome-extension-specsnap (verified live: SEO, OG, JSON-LD, images, sitemap). README links it.
